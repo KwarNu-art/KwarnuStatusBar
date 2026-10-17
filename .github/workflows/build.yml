@@ -1,44 +1,31 @@
-name: Build KwarnuStatusBar Tweak  
-  
-on:  
-  push:  
-    branches: [ main, master ]  
-  pull_request:  
-    branches: [ main, master ]  
-  workflow_dispatch:  
-  
-jobs:  
-  build:  
-    runs-on: macos-13  
-  
-    steps:  
-      - name: Checkout Source Code  
-        uses: actions/checkout@v4  
-        with:  
-          submodules: recursive  
-  
-      - name: Setup Theos  
-        run: |  
-          bash -c "$(curl -fsSL https://raw.githubusercontent.com/theos/theos/master/bin/install-theos)"  
-          echo "THEOS=$HOME/theos" >> $GITHUB_ENV  
-  
-      - name: Download iOS Patched SDK  
-        run: |  
-          git clone --quiet -n --depth=1 --filter=tree:0 https://github.com/theos/sdks.git $THEOS/sdks  
-          cd $THEOS/sdks  
-          git sparse-checkout set --no-cone iPhoneOS16.5.sdk  
-          git checkout  
-        env:  
-          THEOS: ${{ github.workspace }}/theos_temp  
-  
-      - name: Compile Rootless .deb Package  
-        run: |  
-          export THEOS=$HOME/theos  
-          make clean  
-          make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless  
-  
-      - name: Upload .deb Package Artifact  
-        uses: actions/upload-artifact@v4  
-        with:  
-          name: KwarnuStatusBar-Rootless  
-          path: packages/*.deb  
+name: Build KwarnuStatusBar
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Clone Theos
+        run: |
+          git clone --recursive https://github.com/theos/theos.git ~/theos
+      - name: Download iOS SDK
+        run: |
+          git clone --depth=1 https://github.com/theos/sdks.git ~/theos/sdks
+      - name: Compile Package
+        run: |
+          export THEOS=$HOME/theos
+          make clean
+          make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+      - name: Upload .deb Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KwarnuStatusBar-Rootless
+          path: packages/.deb
