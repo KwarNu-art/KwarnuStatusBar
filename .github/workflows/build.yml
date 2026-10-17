@@ -17,7 +17,7 @@ jobs:
         with:  
           submodules: recursive  
   
-      - name: Install Dependencies (ldid & dpkg)  
+      - name: Install Dependencies  
         run: |  
           brew install ldid dpkg  
   
@@ -46,6 +46,6 @@ jobs:
       - name: Upload .deb Artifact  
         uses: actions/upload-artifact@v4  
         with:  
-          name: KwarnuStatusBar-Rootless  
+          name: KwarnuStatusBar-Premium-Rootless  
           path: packages/  
           if-no-files-found: error  
