@@ -1,0 +1,9 @@
+Package: com.kwarnu.statusbar
+Name: KwarnuStatusBar
+Version: 1.0.0
+Architecture: iphoneos-arm64
+Description: Elegant status bar with centered clock and kwarnu branding
+Maintainer: kwarnu
+Author: kwarnu
+Section: Tweaks
+Depends: mobilesubstrate
