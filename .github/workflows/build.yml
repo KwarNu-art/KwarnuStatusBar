@@ -31,6 +31,21 @@ jobs:
           rm -rf $HOME/theos/sdks  
           git clone --depth=1 https://github.com/theos/sdks.git $HOME/theos/sdks  
   
+      - name: Enforce Valid Control File  
+        run: |  
+          cat << 'EOF' > control  
+          Package: com.kwarnu.statusbar  
+          Name: KwarnuStatusBar  
+          Version: 1.0.0  
+          Architecture: iphoneos-arm64  
+          Description: Kwarnu StatusBar Tweak  
+          Maintainer: kwarnu  
+          Author: kwarnu  
+          Section: Tweaks  
+          Depends: mobilesubstrate  
+          EOF  
+          cat control  
+  
       - name: Compile Package  
         run: |  
           export THEOS=$HOME/theos  
@@ -46,6 +61,6 @@ jobs:
       - name: Upload .deb Artifact  
         uses: actions/upload-artifact@v4  
         with:  
-          name: KwarnuStatusBar-Premium-Rootless  
-          path: packages/  
+          name: KwarnuStatusBar-Rootless  
+          path: packages/*.deb  
           if-no-files-found: error  
