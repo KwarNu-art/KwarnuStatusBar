@@ -26,7 +26,7 @@ static UILabel *kwarnuTextLabel = nil;
         kwarnuBadge.layer.borderWidth = 0.5;  
         kwarnuBadge.layer.borderColor = [[UIColor whiteColor] colorWithAlphaComponent:0.25].CGColor;  
   
-        // Frosted Ultra-Thin Material Blur Effect  
+        // Subtle Frosted Material Blur Effect  
         UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemUltraThinMaterialDark];  
         UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];  
         blurView.frame = CGRectMake(0, 0, 80, 22);  
@@ -48,7 +48,7 @@ static UILabel *kwarnuTextLabel = nil;
         [self addSubview:kwarnuBadge];  
     }  
   
-    // Precise Top / Baseline Alignment for Notched & Dynamic Island iPhones  
+    // Precise Top / Baseline Alignment for Notched and Dynamic Island iPhones  
     CGFloat topY = (self.frame.size.height > 24) ? 14.0 : 10.0;  
     CGFloat badgeWidth = 72.0;  
     CGFloat badgeHeight = 22.0;  
