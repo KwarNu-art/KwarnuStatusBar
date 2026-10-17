@@ -16,12 +16,13 @@ jobs:
       - name: Clone Theos
         run: |
           git clone --recursive https://github.com/theos/theos.git ~/theos
+          echo "THEOS=$HOME/theos" >> $GITHUB_ENV
       - name: Download iOS SDK
         run: |
-          git clone --depth=1 https://github.com/theos/sdks.git ~/theos/sdks
+          rm -rf $HOME/theos/sdks
+          git clone --depth=1 https://github.com/theos/sdks.git $HOME/theos/sdks
       - name: Compile Package
         run: |
-          export THEOS=$HOME/theos
           make clean
           make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
       - name: Upload .deb Artifact
