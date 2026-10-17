@@ -9,5 +9,6 @@ TWEAK_NAME := KwarnuStatusBar
   
 KwarnuStatusBar_FILES := Tweak.x  
 KwarnuStatusBar_CFLAGS := -fobjc-arc -Wno-unused-variable -Wno-unused-function  
+KwarnuStatusBar_FRAMEWORKS := UIKit CoreGraphics  
   
 include $(THEOS_MAKE_PATH)/tweak.mk  
