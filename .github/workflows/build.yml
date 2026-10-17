@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: Install Dependencies (ldid & dpkg)
+      - name: Install Dependencies
         run: |
           brew install ldid dpkg
       - name: Clone Theos
@@ -26,16 +26,17 @@ jobs:
           git clone --depth=1 https://github.com/theos/sdks.git $HOME/theos/sdks
       - name: Compile Package
         run: |
+          export THEOS=$HOME/theos
           make clean
-          make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-      - name: Locate and Prepare .deb Package
+          make package FINALPACKAGE=1
+      - name: Collect Debian Packages
         run: |
-          mkdir -p packages
-          find . -name ".deb" -exec cp {} packages/ \;
-          ls -la packages/
+          mkdir -p output_deb
+          find . -type f -name ".deb" -exec cp -v {} output_deb/ \;
+          ls -la output_deb/
       - name: Upload .deb Artifact
         uses: actions/upload-artifact@v4
         with:
           name: KwarnuStatusBar-Rootless
-          path: packages/.deb
+          path: output_deb/.deb
           if-no-files-found: error
