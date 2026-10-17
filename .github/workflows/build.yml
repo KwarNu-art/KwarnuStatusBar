@@ -1,42 +1,51 @@
-name: Build KwarnuStatusBar
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
-  workflow_dispatch:
-jobs:
-  build:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Install Dependencies
-        run: |
-          brew install ldid dpkg
-      - name: Clone Theos
-        run: |
-          git clone --recursive https://github.com/theos/theos.git ~/theos
-          echo "THEOS=$HOME/theos" >> $GITHUB_ENV
-      - name: Download iOS SDK
-        run: |
-          rm -rf $HOME/theos/sdks
-          git clone --depth=1 https://github.com/theos/sdks.git $HOME/theos/sdks
-      - name: Compile Package
-        run: |
-          export THEOS=$HOME/theos
-          make clean
-          make package FINALPACKAGE=1
-      - name: Collect Debian Packages
-        run: |
-          mkdir -p output_deb
-          find . -type f -name ".deb" -exec cp -v {} output_deb/ \;
-          ls -la output_deb/
-      - name: Upload .deb Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: KwarnuStatusBar-Rootless
-          path: output_deb/.deb
-          if-no-files-found: error
+name: Build KwarnuStatusBar  
+  
+on:  
+  push:  
+    branches: [ main, master ]  
+  pull_request:  
+    branches: [ main, master ]  
+  workflow_dispatch:  
+  
+jobs:  
+  build:  
+    runs-on: macos-latest  
+  
+    steps:  
+      - name: Checkout Source Code  
+        uses: actions/checkout@v4  
+        with:  
+          submodules: recursive  
+  
+      - name: Install Dependencies (ldid & dpkg)  
+        run: |  
+          brew install ldid dpkg  
+  
+      - name: Clone Theos  
+        run: |  
+          git clone --recursive https://github.com/theos/theos.git ~/theos  
+          echo "THEOS=$HOME/theos" >> $GITHUB_ENV  
+  
+      - name: Download iOS SDK  
+        run: |  
+          rm -rf $HOME/theos/sdks  
+          git clone --depth=1 https://github.com/theos/sdks.git $HOME/theos/sdks  
+  
+      - name: Compile Package  
+        run: |  
+          export THEOS=$HOME/theos  
+          make clean  
+          make package FINALPACKAGE=1  
+  
+      - name: Organize Debian Packages  
+        run: |  
+          mkdir -p packages  
+          find . -type f -name "*.deb" -exec cp -v {} packages/ \;  
+          ls -la packages/  
+  
+      - name: Upload .deb Artifact  
+        uses: actions/upload-artifact@v4  
+        with:  
+          name: KwarnuStatusBar-Rootless  
+          path: packages/  
+          if-no-files-found: error  
